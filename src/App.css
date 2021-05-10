@@ -1,3 +1,15 @@
 .App {
   text-align: center;
 }
+
+.next-button{
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+}
+
+.type-buttons {
+  display: flex;
+  justify-content: space-around;
+  
+}
