@@ -7,7 +7,7 @@ class Pokedex extends React.Component {
 		super(props)
 
 		this.state = {
-			pokemonIndex: 0,
+			pokemonIndex: 0,			
 			pokemonType:'all',
       renderPokemon: [],
 		}
@@ -18,38 +18,32 @@ class Pokedex extends React.Component {
 
 	}
 
-  // componentDidMount() {
-  //   console.log('Aqui')
-  //   const { pokemons } = this.props;
-  //   this.setState({ renderPokemon: pokemons })
-  // }
-
 	nextPokemon = () => {
 		this.setState((estadoAnterior) => ({
 			pokemonIndex: estadoAnterior.pokemonIndex + 1
-		}))
-		if(this.state.pokemonIndex === pokemons.length - 1) {
+		}));			
+		if(this.state.pokemonIndex 
+			=== (this.state.pokemonType === 'all' ? pokemons.length : this.state.renderPokemon.length) - 1) {
 			this.setState({ pokemonIndex: 0 })
 		}
 	}
 
-	filteredPokemon = () => {
-    const { pokemonType, pokemonIndex } = this.state
-    if (pokemonType !== "all") {
-      const pokeFiltered = pokemons.filter((type) => type.type === pokemonType);
-      return pokeFiltered[pokemonIndex];
+	filteredPokemon = (target) => {
+    if (target !== "all") {
+      const pokeFiltered = pokemons.filter((type) => type.type === target);			
+      return pokeFiltered;
     }
-    return pokemons[pokemonIndex];
+		return pokemons;
 	}
 
   setPokemonsState({ target }) {
-    this.setState({ pokemonType: target.innerHTML, pokemonIndex: 0 });
-    console.log(target.innerHTML)
-    console.log(this.state.pokemonType);
-    // const { pokemonType } = this.state
-    // if (target.innerHTML !== pokemonType){
-    // }
+		this.setState({ pokemonType: target.innerHTML, pokemonIndex: 0, renderPokemon: this.filteredPokemon(target.innerHTML)});
   }
+
+	pokemonTypeArray = () => {
+		const pokemosSet = new Set(pokemons.map(({type}) => type ));
+		return Array.from(pokemosSet);
+	}
 
 	render() {
     const { pokemons } = this.props;
@@ -57,11 +51,13 @@ class Pokedex extends React.Component {
 		return (
 			<div >
 				<div className="pokedex">
-					{<Pokemon key={pokemons.id} pokemon={this.filteredPokemon()} />}
+					{<Pokemon key={pokemons.id} pokemon={renderPokemon.length === 0 ? pokemons[pokemonIndex] : renderPokemon[pokemonIndex]} />}
 				</div>
 				<div className='type-buttons'>
-					<button onClick={ this.setPokemonsState}>Fire</button>
-					<button onClick={ this.setPokemonsState}>Psychic</button>
+					<button onClick={ this.setPokemonsState}>all</button>
+					{this.pokemonTypeArray().map((item) => 
+						<button onClick={ this.setPokemonsState }>{item}</button>
+						)}
 				</div>
 				<div className='next-button'>
 					<button onClick={this.nextPokemon}> Next Pokemon</button>
