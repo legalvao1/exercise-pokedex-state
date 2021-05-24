@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {Component} from 'react';
 import pokemons from './data';
 import Pokemon from './Pokemon';
+import PropTypes from 'prop-types'
 
 class Pokedex extends React.Component {
 	constructor(props) {
@@ -66,5 +67,17 @@ class Pokedex extends React.Component {
 		);
 	}
 }
+
+Pokedex.propTypes = {
+  pok: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    averageWeight: PropTypes.shape({
+      value: PropTypes.number.isRequired,
+      measurementUnit: PropTypes.string.isRequired,
+    }).isRequired,
+    image: PropTypes.string.isRequired,
+  })).isRequired,
+};
 
 export default Pokedex;
